@@ -41,8 +41,14 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem('books', JSON.stringify(books))
     window.localStorage.setItem('readinglist', JSON.stringify(readingList))
-    // console.log(bookGenres);
   }, [books, readingList])
+  const handleRemoveFilters = () => {
+    const filteredISBNs = readingList.map((book) => book.book.ISBN)
+    const filterByISBN = BookData.library.filter((book) => {
+      return !filteredISBNs.includes(book.book.ISBN)
+    })
+    setBooks(filterByISBN)
+  }
   return (
     <div className="h-screen bg-slate-100 overflow-hidden">
       <header className="container mx-auto text-center m-0">
@@ -54,7 +60,7 @@ function App() {
         <ul className="flex gap-4 p-2">
           <li
             onClick={() => {
-              setBooks(BookData.library)
+              handleRemoveFilters()
             }}
           >
             Remove Filters
@@ -91,7 +97,6 @@ function App() {
                   const index = books.indexOf(book)
                   books.splice(index, 1)
                 } else {
-                  console.log(readingList)
                 }
               }}
             >
@@ -139,7 +144,6 @@ function App() {
                       onClick={() => {
                         setBooks([...books, reading])
                         const index = readingList.indexOf(reading)
-                        console.log(index)
                         readingList.splice(index, 1)
                       }}
                     >
